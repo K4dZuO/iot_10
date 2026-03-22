@@ -22,8 +22,7 @@ def ingest_measurements(batch, session: Session):
         # простая идемпотентность
         exists = session.exec(
             select(Measurement).where(
-                Measurement.sensor_id == m.sensorId,
-                Measurement.timestamp == timestamp
+                Measurement.sensor_id == m.sensorId, Measurement.timestamp == timestamp
             )
         ).first()
 
@@ -33,14 +32,17 @@ def ingest_measurements(batch, session: Session):
         measurement = Measurement(
             sensor_id=m.sensorId,
             temperature=m.temperature,
-            timestamp=timestamp
+            humidity=m.humidity,
+            timestamp=timestamp,
         )
         session.add(measurement)
 
     session.commit()
 
 
-def get_measurements(session: Session, sensor_ids: Optional[List[str]], from_, to, limit: int, cursor):
+def get_measurements(
+    session: Session, sensor_ids: Optional[List[str]], from_, to, limit: int, cursor
+):
     query = select(Measurement)
 
     if sensor_ids:
@@ -58,5 +60,3 @@ def get_measurements(session: Session, sensor_ids: Optional[List[str]], from_, t
     query = query.order_by(Measurement.timestamp.desc()).limit(limit)
 
     return session.exec(query).all()
-
-

@@ -14,7 +14,7 @@ def read_sensors(session=Depends(get_session)):
 
 @router.patch("/{sensor_id}")
 def patch_sensor(sensor_id: str, payload: SensorUpdate, session=Depends(get_session)):
-    sensor = update_sensor(session, sensor_id, payload.name)
+    sensor = update_sensor(session, sensor_id, payload.name, payload.type)
 
     if not sensor:
         raise HTTPException(status_code=404, detail="Sensor not found")

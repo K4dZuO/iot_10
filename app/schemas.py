@@ -2,9 +2,11 @@ from sqlmodel import SQLModel
 from typing import Optional, List
 from datetime import datetime
 
+
 class MeasurementInput(SQLModel):
     sensorId: str
     temperature: float
+    humidity: Optional[float] = None
     timestamp: Optional[datetime] = None
 
 
@@ -26,4 +28,4 @@ class MeasurementListResponse(SQLModel):
 
 class SensorUpdate(SQLModel):
     name: Optional[str]
-
+    type: Optional[str]
